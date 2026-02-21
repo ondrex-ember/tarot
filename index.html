@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Můj Magický Tarot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Tarotový výklad</h1>
+            <p class="subtitle">Zeptejte se karet na svou cestu</p>
+            <button id="draw-btn">Vytáhnout 3 karty</button>
+        </header>
+        
+        <div id="loading" class="hidden">Karty se míchají...</div>
+        
+        <main id="tarot-board" class="hidden">
+            
+            <div class="spread-container">
+                <div class="card-wrapper">
+                    <h3 class="position-title">Minulost</h3>
+                    <div class="card-display perspective" id="card1-container">
+                        <div class="card-inner" id="card1-inner">
+                            <div class="card-face card-back"><img src="assets/card_back.jpg" alt="Rub karty"></div>
+                            <div class="card-face card-front"><img id="card1-img" src="" alt="Minulost"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-wrapper">
+                    <h3 class="position-title">Přítomnost</h3>
+                    <div class="card-display perspective" id="card2-container">
+                        <div class="card-inner" id="card2-inner">
+                            <div class="card-face card-back"><img src="assets/card_back.jpg" alt="Rub karty"></div>
+                            <div class="card-face card-front"><img id="card2-img" src="" alt="Přítomnost"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-wrapper">
+                    <h3 class="position-title">Budoucnost</h3>
+                    <div class="card-display perspective" id="card3-container">
+                        <div class="card-inner" id="card3-inner">
+                            <div class="card-face card-back"><img src="assets/card_back.jpg" alt="Rub karty"></div>
+                            <div class="card-face card-front"><img id="card3-img" src="" alt="Budoucnost"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-info hidden" id="reading-text">
+                </div>
+
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

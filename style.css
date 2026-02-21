@@ -1,0 +1,226 @@
+﻿/* Základní reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Georgia', serif; /* Patkové písmo působí víc knižně a mysticky */
+    background-color: #1a1a2e; /* Temně modré pozadí */
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.app-container {
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+}
+
+header h1 {
+    color: #e94560; /* Červeno-růžový akcent */
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-style: italic;
+    color: #8f8f8f;
+    margin-bottom: 30px;
+}
+
+button {
+    background-color: #0f3460;
+    color: white;
+    border: 2px solid #e94560;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #e94560;
+    box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
+}
+
+/* Skrývání elementů v HTML */
+.hidden {
+    display: none !important;
+}
+
+#loading {
+    margin-top: 30px;
+    font-size: 1.2rem;
+    color: #fca311; /* Zlatá barva pro načítání */
+    font-style: italic;
+}
+
+#tarot-board {
+    margin-top: 40px;
+    background: #16213e;
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* TADY ŘEŠÍME 3D OTÁČENÍ KARET */
+.perspective {
+    perspective: 1000px; /* Dodává 3D hloubku */
+    width: 220px;
+    height: 380px;
+    margin: 0 auto 30px auto;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Plynulá animace s malým zhoupnutím nakonec */
+    transform-style: preserve-3d; /* Důležité pro 3D efekt */
+}
+
+/* Třída pro spuštění otočení z JS */
+.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Skryje odvrácenou stranu karty */
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+}
+
+.card-front {
+    transform: rotateY(180deg); /* Lícová strana je zrcadlově obrácená, dokud se karta neotočí */
+}
+
+.card-face img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Náš starý dobrý trik na pixely */
+    border-radius: 12px;
+    border: 2px solid #1a1a2e;
+}
+
+/* Fyzické otočení lícové strany, pokud karta padne obráceně */
+.reversed-card {
+    transform: rotateZ(180deg);
+}
+/* Třída, kterou přidáme v JS, když karta padne obráceně */
+.reversed-card {
+    transform: rotate(180deg);
+}
+
+.card-info {
+    text-align: center;
+}
+
+#card-title {
+    color: #fff;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.position-info {
+    color: #e94560;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.keywords {
+    font-style: italic;
+    color: #fca311;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.meaning-section {
+    text-align: left;
+    background-color: #1a1a2e;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #fca311;
+}
+
+.meaning-section h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+#card-meaning {
+    line-height: 1.6;
+    color: #c0c0c0;
+}
+/* --- ROZVRŽENÍ VÝKLADU NA 3 KARTY --- */
+.spread-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; /* Na malých displejích skočí karty pod sebe */
+    margin-bottom: 30px;
+}
+
+.card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.position-title {
+    color: #fca311;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Zmenšíme trochu karty, aby se tři vešly vedle sebe */
+.perspective {
+    width: 160px;
+    height: 276px;
+    margin: 0;
+}
+
+/* Styly pro textové bloky výkladu */
+.reading-block {
+    text-align: left;
+    background-color: #1a1a2e;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #e94560;
+    margin-bottom: 20px;
+}
+
+.reading-block h4 {
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.reading-block .meta-info {
+    color: #fca311;
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.reading-block p {
+    line-height: 1.6;
+    color: #c0c0c0;
+}
