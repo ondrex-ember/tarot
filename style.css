@@ -1,4 +1,4 @@
-﻿/* Základní reset */
+/* Základní reset */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -223,4 +223,41 @@ button:hover {
 .reading-block p {
     line-height: 1.6;
     color: #c0c0c0;
+}
+
+/* --- AI VĚŠTEC --- */
+.ai-reading {
+    background-color: rgba(233, 69, 96, 0.1);
+    border: 1px solid #e94560;
+    padding: 25px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: left;
+    box-shadow: 0 0 15px rgba(233, 69, 96, 0.2);
+}
+
+.ai-reading h3 {
+    color: #e94560;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+#ai-text-content {
+    color: #fca311;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    font-style: italic;
+}
+
+/* Blikající kurzor pro efekt psacího stroje */
+.cursor-blink {
+    border-right: 2px solid #e94560;
+    animation: blink 0.75s step-end infinite;
+}
+
+@keyframes blink {
+    50% { border-color: transparent; }
 }
