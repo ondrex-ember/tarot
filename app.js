@@ -1,5 +1,5 @@
-﻿// DŮLEŽITÉ: Zde vložte vaši PERMANENTNÍ adresu končící na /exec
-const API_URL = 'https://script.google.com/macros/s/AKfycbwLvBpGzjpLO_MAJgs26VUwNM_kiwZF4aQEdEC4Cf1Vr4bHMGpub82ee1YILni9sA9i/exec';
+// DŮLEŽITÉ: Zde vložte vaši PERMANENTNÍ adresu končící na /exec
+const API_URL = 'https://script.google.com/macros/s/AKfycbzg2YNckMcLzo5Z2bVbonXMHTJXInJfR1M4BsXhWE0CrbUTQ9cht2YOSSfg-Wkhl_nT/exec';
 
 // Proměnná, do které si uložíme karty z Google Tabulky
 let tarotDeck = [];
@@ -39,38 +39,38 @@ async function loadCards() {
 // const cardInner = document.getElementById('card-inner');
 
 function drawCard() {
-    // Pokud nemáme karty, nic neděláme
     if (tarotDeck.length < 3) return;
 
     const readingTextContainer = document.getElementById('reading-text');
+    const aiContainer = document.getElementById('ai-reading-container');
+    const aiTextEl = document.getElementById('ai-text-content');
     
-    // 1. Skryjeme předchozí texty a otočíme karty zpět rubem nahoru
+    // Skryjeme staré texty
     readingTextContainer.innerHTML = '';
     readingTextContainer.classList.add('hidden');
+    aiContainer.classList.add('hidden');
+    aiTextEl.innerHTML = '';
     
     for(let i = 1; i <= 3; i++) {
         document.getElementById(`card${i}-inner`).classList.remove('is-flipped');
     }
 
-    // Dáme kartám 400ms na zakrytí
     setTimeout(() => {
         tarotBoard.classList.remove('hidden');
 
-        // 2. Logika pro výběr 3 UNIKÁTNÍCH karet (bez opakování)
-        let deckCopy = [...tarotDeck]; // Uděláme si pracovní kopii balíčku
+        let deckCopy = [...tarotDeck];
         let drawnCards = [];
         for(let i = 0; i < 3; i++) {
             const randomIndex = Math.floor(Math.random() * deckCopy.length);
-            // Vyřízneme kartu z balíčku a přesuneme do tažených
             drawnCards.push(deckCopy.splice(randomIndex, 1)[0]); 
         }
 
         const positions = ["Minulost", "Přítomnost", "Budoucnost"];
-        let htmlContent = ""; // Sem si poskládáme texty
+        let htmlContent = ""; 
+        let kartyProAI = []; // Sem si uložíme názvy karet pro věštce
 
-        // 3. Přiřazení dat jednotlivým kartám
         drawnCards.forEach((card, index) => {
-            const num = index + 1; // Číslo slotu (1, 2, 3)
+            const num = index + 1; 
             const isReversed = Math.random() < 0.5;
             const imgEl = document.getElementById(`card${num}-img`);
             
@@ -89,7 +89,9 @@ function drawCard() {
                 meaning = card.meaning_upright_general;
             }
 
-            // Příprava textového bloku pro tuto kartu
+            // Zapíšeme si kartu do seznamu pro AI
+            kartyProAI.push(`${card.name_cz} (${posText})`);
+
             htmlContent += `
                 <div class="reading-block">
                     <h4>${positions[index]}: ${card.name_cz}</h4>
@@ -98,19 +100,40 @@ function drawCard() {
                 </div>
             `;
 
-            // 4. Magie postupného otáčení! (Kaskádový efekt)
             setTimeout(() => {
                 document.getElementById(`card${num}-inner`).classList.add('is-flipped');
-            }, num * 500); // 1. karta za 500ms, 2. za 1000ms, 3. za 1500ms
+            }, num * 500); 
         });
 
-        // 5. Vložení textů a jejich zobrazení, až se dotočí poslední karta
+        // Zobrazíme klasické texty z tabulky
         readingTextContainer.innerHTML = htmlContent;
         setTimeout(() => {
             readingTextContainer.classList.remove('hidden');
+            
+            // --- VOLÁNÍ AI VĚŠTCE ---
+            // Zobrazíme box pro AI a dáme tam text, že věštec přemýšlí
+            aiContainer.classList.remove('hidden');
+            aiTextEl.innerHTML = "<i>Věštec naslouchá hvězdám...</i>";
+
+            // Sestavíme URL pro náš Apps Script s parametrem action=reading
+            const kartyString = encodeURIComponent(kartyProAI.join(", "));
+            const fetchUrl = `${API_URL}?action=reading&cards=${kartyString}`;
+
+            fetch(fetchUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Jakmile přijde odpověď, spustíme efekt psacího stroje!
+                    if (data.reading) {
+                        typeWriterEffect(data.reading, 'ai-text-content', 40);
+                    }
+                })
+                .catch(err => {
+                    aiTextEl.innerHTML = "Spojení s astrální sférou selhalo.";
+                });
+
         }, 2200);
 
-    }, 400); // Konec prvního setTimeoutu
+    }, 400); 
 }
 
 // 3. Spuštění interakce
@@ -119,3 +142,29 @@ drawBtn.addEventListener('click', drawCard);
 
 // Hned po spuštění stránky začneme na pozadí stahovat karty
 loadCards();
+
+// --- VYLEPŠENÝ EFEKT PSACÍHO STROJE PRO AI ---
+function typeWriterEffect(text, elementId, speed = 35) {
+    const el = document.getElementById(elementId);
+    el.innerHTML = "";
+    el.classList.add("cursor-blink");
+    
+    let cleanText = text.replace(/\*\*/g, ''); 
+    const chars = Array.from(cleanText); 
+    let i = 0;
+    
+    function type() {
+        if (i < chars.length) {
+            if (chars[i] === '\n') {
+                el.innerHTML += '<br>';
+            } else {
+                el.innerHTML += chars[i];
+            }
+            i++;
+            setTimeout(type, speed);
+        } else {
+            el.classList.remove("cursor-blink"); 
+        }
+    }
+    type();
+}
